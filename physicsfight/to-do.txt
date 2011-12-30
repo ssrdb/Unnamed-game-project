@@ -1,0 +1,5 @@
+2011.12.30 - Daníel
+
+Fyrsta sem þarf að gera er ofur einfaldann "leik" þar sem við getum fært til
+einhvern hlut (WASD) hoppað. Síðan er spurning hvort við bætum strax við lan
+support í leikinn. Það ætti ekki að vera of flókið (samanber ping-pong leikinn)
