@@ -4,6 +4,7 @@ sprite_image_filename = 'arrowupvoted.png'
 import pygame
 from pygame.locals import *
 from sys import exit
+from gameobjects.vector2 import Vector2
 
 pygame.init()
 
@@ -13,31 +14,32 @@ background = pygame.image.load(background_image_filename).convert()
 sprite = pygame.image.load(sprite_image_filename)
 
 clock = pygame.time.Clock()
-x,y = 100., 100.
-speed_x, speed_y = 133., 170.
+
+sprite_pos = Vector2(200, 150)
+sprite_speed = 300.
+
 while True:
   for event in pygame.event.get():
     if event.type == QUIT:
       exit()
+  pressed_keys = pygame.key.get_pressed()
+
+  key_direction = Vector2(0,0)
+  if pressed_keys[K_LEFT]:
+    key_direction.x=-1
+  elif pressed_keys[K_RIGHT]:
+    key_direction.x=+1
+  if pressed_keys[K_UP]:
+    key_direction.y=-1
+  elif pressed_keys[K_DOWN]:
+    key_direction.y = +1
+    
+  key_direction.normalize()
+
   screen.blit(background, (0,0))
-  screen.blit(sprite,(x,y))
+  screen.blit(sprite,sprite_pos)
   time_passed = clock.tick(70)
   time_passed_seconds = time_passed/1000.0
 
-  x += speed_x * time_passed_seconds
-  y += speed_y * time_passed_seconds
-
-  if x > 640. -sprite.get_width():
-    speed_x = -speed_x
-    x = 640 - sprite.get_width()
-  elif x <0:
-    speed_x = -speed_x
-    x=0.
-
-  if y > 480 - sprite.get_height():
-    speed_y = -speed_y
-    y = 480-sprite.get_height()
-  elif y<0:
-    speed_y=-speed_y
-    y=0.
+  sprite_pos += key_direction * sprite_speed*time_passed_seconds
   pygame.display.update() #display everything!

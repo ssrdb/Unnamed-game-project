@@ -21,7 +21,7 @@ while True:
       exit()
   screen.blit(background, (0,0))
   screen.blit(sprite,(x,y))
-  time_passed = clock.tick(70)
+  time_passed = clock.tick(60)
   time_passed_seconds = time_passed/1000.0
 
   x += speed_x * time_passed_seconds

@@ -4,6 +4,7 @@ sprite_image_filename = 'arrowupvoted.png'
 import pygame
 from pygame.locals import *
 from sys import exit
+from gameobjects.vector2 import Vector2
 
 pygame.init()
 
@@ -13,31 +14,24 @@ background = pygame.image.load(background_image_filename).convert()
 sprite = pygame.image.load(sprite_image_filename)
 
 clock = pygame.time.Clock()
-x,y = 100., 100.
-speed_x, speed_y = 133., 170.
+position = Vector2(100.0, 100.0)
+speed = 250.
+heading = Vector2()
+
 while True:
   for event in pygame.event.get():
     if event.type == QUIT:
       exit()
+    if event.type == MOUSEBUTTONDOWN:
+      destination = Vector2(*event.pos) - Vector2(*sprite.get_size())/2
+      heading = Vector2.from_points(position, destination)
+      heading.normalize()
+
   screen.blit(background, (0,0))
-  screen.blit(sprite,(x,y))
+  screen.blit(sprite,position)
   time_passed = clock.tick(70)
   time_passed_seconds = time_passed/1000.0
 
-  x += speed_x * time_passed_seconds
-  y += speed_y * time_passed_seconds
-
-  if x > 640. -sprite.get_width():
-    speed_x = -speed_x
-    x = 640 - sprite.get_width()
-  elif x <0:
-    speed_x = -speed_x
-    x=0.
-
-  if y > 480 - sprite.get_height():
-    speed_y = -speed_y
-    y = 480-sprite.get_height()
-  elif y<0:
-    speed_y=-speed_y
-    y=0.
+  distance = time_passed_seconds*speed
+  position += heading * distance
   pygame.display.update() #display everything!
